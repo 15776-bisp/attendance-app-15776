@@ -1,0 +1,36 @@
+TABLE: SYSTEM TESTING RESULTS
+
+| Test ID | Test Area | Test Case | Expected Result | Actual Result | Status |
+|--------|-----------|-----------|-----------------|---------------|--------|
+| T01 | Login | Employee logs in with valid credentials | Employee dashboard/home opens successfully | Employee login works and redirects correctly | Pass |
+| T02 | Login | Manager logs in with valid credentials | Manager dashboard/home opens successfully | Manager login works and redirects correctly | Pass |
+| T03 | Login | Invalid login attempt | Error message is shown | Invalid credentials show login error | Pass |
+| T04 | Navigation | Logout | User is logged out and sent to login page | Logout works correctly | Pass |
+| T05 | Home Dashboard | Employee home dashboard | Employee sees employee tools only | Employee sees My Shifts and Attendance History | Pass |
+| T06 | Home Dashboard | Manager home dashboard | Manager sees manager tools and employee tools | Manager sees all required cards and links | Pass |
+| T07 | My Shifts | Department-based visibility | Employee sees only shifts for own department | Dispatcher user sees only Dispatcher shifts | Pass |
+| T08 | My Shifts | Future shift display | Attendance buttons appear for future shifts | Buttons appear correctly | Pass |
+| T09 | My Shifts | Past shift restriction | Past shifts cannot be edited | Buttons hidden and warning shown | Pass |
+| T10 | Attendance Submission | Present submission | User can submit present without reason | Present saved successfully | Pass |
+| T11 | Attendance Submission | Absent submission without reason | Error message should appear | Validation prevents submission | Pass |
+| T12 | Attendance Submission | Late submission without reason | Error message should appear | Validation prevents submission | Pass |
+| T13 | Attendance Submission | Absent/Late with reason | Record saved successfully | Attendance saved successfully | Pass |
+| T14 | Attendance History | View history | Submitted records are shown correctly | Records shown with date, department, status, reason | Pass |
+| T15 | Manager Dashboard | Dashboard access | Only manager can access dashboard | Manager access works correctly | Pass |
+| T16 | Manager Dashboard | Summary cards | Present/Absent/Late totals are shown | Cards display correctly | Pass |
+| T17 | Manager Dashboard | Date filter | Dashboard shows filtered results by date | Filter works correctly | Pass |
+| T18 | Manager Dashboard | Department filter | Dashboard shows filtered results by department | Filter works correctly | Pass |
+| T19 | Shift Management | Create shift | Manager can create shift from website | Shift created successfully | Pass |
+| T20 | Shift Management | Edit shift | Manager can edit shift details | Shift updated successfully | Pass |
+| T21 | Shift Management | Delete shift | Manager can delete shift after confirmation | Shift deleted successfully | Pass |
+| T22 | Shift Management | Duplicate prevention | Duplicate shift should not be created | System prevents duplicate shift | Pass |
+| T23 | Shift List | Shift list filter by date | Only matching date shifts are shown | Filter works correctly | Pass |
+| T24 | Shift List | Shift list filter by department | Only matching department shifts are shown | Filter works correctly | Pass |
+| T25 | Attendance Management | Attendance list access | Manager can view all attendance records | Attendance list works correctly | Pass |
+| T26 | Attendance Management | Edit attendance | Manager can edit attendance record | Attendance updated successfully | Pass |
+| T27 | Attendance Management | Delete attendance | Manager can delete attendance after confirmation | Attendance deleted successfully | Pass |
+| T28 | Attendance Management | Attendance filter by date | Matching records are shown | Filter works correctly | Pass |
+| T29 | Attendance Management | Attendance filter by department | Matching records are shown | Filter works correctly | Pass |
+| T30 | Attendance Management | Attendance filter by status | Matching records are shown | Filter works correctly | Pass |
+| T31 | Permissions | Employee access restriction | Employee cannot access manager-only pages | Restriction works correctly | Pass |
+| T32 | UI | Styled pages | Key pages have consistent layout and styling | UI is consistent across main pages | Pass |

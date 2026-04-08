@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shift List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #1f4e79;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            margin-top: 10px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .top-bar {
+            margin-bottom: 20px;
+        }
+
+        .top-bar a {
+            display: inline-block;
+            background: #1f4e79;
+            color: white;
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #e9eef3;
+        }
+
+        .action a {
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .edit-link {
+            color: #1f4e79;
+        }
+
+        .delete-link {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Shift List</h1>
+            <div class="nav">
+                <a href="/">Home</a>
+                <a href="/my-shifts/">My Shifts</a>
+                <a href="/attendance-history/">Attendance History</a>
+                <a href="/manager-dashboard/">Manager Dashboard</a>
+                <a href="/create-shift/">Create Shift</a>
+                <a href="/shift-list/">Shift List</a>
+                <a href="/attendance-list/">Attendance List</a>
+                <form action="/logout/" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding:0; margin:0;">
+        Logout
+    </button>
+</form>
+            </div>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+<div class="top-bar" style="display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;">
+    <a href="/create-shift/">+ Create New Shift</a>
+
+    <form method="get" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="date" name="date" value="{{ selected_date|default:'' }}" style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+
+        <select name="dept" style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+            <option value="">All Departments</option>
+            {% for d in departments %}
+                <option value="{{ d.id }}" {% if selected_dept == d.id|stringformat:"s" %}selected{% endif %}>
+                    {{ d.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" style="background:#1f4e79; color:white; border:none; padding:10px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">
+            Filter
+        </button>
+        <a href="/shift-list/" style="text-decoration:none; color:#1f4e79; font-weight:bold;">Reset</a>
+    </form>
+</div>
+
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Shift Type</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+
+            {% for shift in shifts %}
+                <tr>
+                    <td>{{ shift.date }}</td>
+                    <td>{{ shift.shift_type|title }}</td>
+                    <td>{{ shift.department.name }}</td>
+                    <td class="action">
+                        <a class="edit-link" href="/edit-shift/{{ shift.id }}/">Edit</a>
+                        <a class="delete-link" href="/delete-shift/{{ shift.id }}/">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No shifts found.</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

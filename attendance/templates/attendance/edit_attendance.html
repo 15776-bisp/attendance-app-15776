@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #1f4e79;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            margin-top: 10px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #1f4e79;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #1f4e79;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Edit Attendance Record</h1>
+            <div class="nav">
+                <a href="/">Home</a>
+                <a href="/my-shifts/">My Shifts</a>
+                <a href="/attendance-history/">Attendance History</a>
+                <a href="/manager-dashboard/">Manager Dashboard</a>
+                <a href="/create-shift/">Create Shift</a>
+                <a href="/shift-list/">Shift List</a>
+                <a href="/attendance-list/">Attendance List</a>
+                <form action="/logout/" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding:0; margin:0;">
+        Logout
+    </button>
+</form>
+            </div>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="box">
+            <ul>
+                <li><strong>User:</strong> {{ record.user.username }}</li>
+                <li><strong>Date:</strong> {{ record.shift.date }}</li>
+                <li><strong>Shift:</strong> {{ record.shift.shift_type|title }}</li>
+                <li><strong>Department:</strong> {{ record.shift.department.name }}</li>
+            </ul>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <p>
+                    <label>Status:</label><br>
+                    <select name="status" required>
+                        <option value="present" {% if record.status == "present" %}selected{% endif %}>Present</option>
+                        <option value="absent" {% if record.status == "absent" %}selected{% endif %}>Absent</option>
+                        <option value="late" {% if record.status == "late" %}selected{% endif %}>Late</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label>Reason:</label><br>
+                    <input type="text" name="reason_text" value="{{ record.reason_text }}">
+                </p>
+
+                <button type="submit">Update Attendance</button>
+            </form>
+
+            <a class="back-link" href="/attendance-list/">← Back to Attendance List</a>
+        </div>
+    </div>
+</body>
+</html>

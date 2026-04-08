@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #1f4e79;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            margin-top: 10px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #e9eef3;
+        }
+
+        .empty-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Attendance History</h1>
+            <div class="nav">
+                <a href="/">Home</a>
+                <a href="/my-shifts/">My Shifts</a>
+                <a href="/attendance-history/">Attendance History</a>
+                <form action="/logout/" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding:0; margin:0;">
+        Logout
+    </button>
+</form>
+            </div>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        {% if records %}
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Shift</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                </tr>
+
+                {% for r in records %}
+                    <tr>
+                        <td>{{ r.shift.date }}</td>
+                        <td>{{ r.shift.shift_type|title }}</td>
+                        <td>{{ r.shift.department.name }}</td>
+                        <td>
+                            {% if r.status == "present" %}
+                                <strong style="color:green;">Present</strong>
+                            {% elif r.status == "absent" %}
+                                <strong style="color:red;">Absent</strong>
+                            {% elif r.status == "late" %}
+                                <strong style="color:orange;">Late</strong>
+                            {% else %}
+                                {{ r.status }}
+                            {% endif %}
+                        </td>
+                        <td>{{ r.reason_text }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="empty-box">
+                <p>No attendance history found.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

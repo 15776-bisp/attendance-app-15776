@@ -1,0 +1,88 @@
+ATTENDANCE SYSTEM – TESTING CHECKLIST
+
+1. LOGIN TESTS
+[ ] Login page opens correctly
+[ ] Employee can log in with valid credentials
+[ ] Manager can log in with valid credentials
+[ ] Invalid login shows error
+[ ] Logout works correctly
+
+2. HOME DASHBOARD TESTS
+[ ] Employee sees employee dashboard links only
+[ ] Manager sees manager dashboard links
+[ ] Home page opens correctly after login
+
+3. MY SHIFTS TESTS
+[ ] Employee can see shifts only for their department
+[ ] Employee cannot see shifts from other departments
+[ ] Future shifts show attendance buttons
+[ ] Past shifts do not allow attendance submission
+
+4. ATTENDANCE SUBMISSION TESTS
+[ ] Employee can mark Present
+[ ] Employee can mark Absent
+[ ] Employee can mark Late
+[ ] Present can be submitted without reason
+[ ] Absent requires reason
+[ ] Late requires reason
+[ ] Success message appears after submission
+[ ] Error message appears when reason is missing
+
+5. ATTENDANCE HISTORY TESTS
+[ ] Employee can see previously submitted attendance
+[ ] History shows correct date
+[ ] History shows correct shift type
+[ ] History shows correct department
+[ ] History shows correct status
+[ ] History shows reason if provided
+
+6. MANAGER DASHBOARD TESTS
+[ ] Manager dashboard opens successfully
+[ ] Summary cards show attendance counts
+[ ] Attendance table shows correct records
+[ ] Status colors display correctly
+[ ] Date filter works
+[ ] Department filter works
+
+7. SHIFT MANAGEMENT TESTS
+[ ] Manager can create a shift
+[ ] Manager can edit a shift
+[ ] Manager can delete a shift
+[ ] Delete shift confirmation page works
+[ ] Duplicate shift is prevented
+[ ] Shift list page opens correctly
+[ ] Shift list date filter works
+[ ] Shift list department filter works
+[ ] Shift list reset works
+
+8. ATTENDANCE MANAGEMENT TESTS
+[ ] Manager can view all attendance records
+[ ] Manager can filter attendance by date
+[ ] Manager can filter attendance by department
+[ ] Manager can filter attendance by status
+[ ] Manager can reset attendance filters
+[ ] Manager can edit attendance record
+[ ] Manager can delete attendance record
+[ ] Delete attendance confirmation page works
+
+9. PERMISSION TESTS
+[ ] Employee cannot access manager dashboard
+[ ] Employee cannot access create shift page
+[ ] Employee cannot access shift list page
+[ ] Employee cannot access attendance list page
+[ ] Manager can access all manager pages
+
+10. UI TESTS
+[ ] Login page is styled correctly
+[ ] Home page is styled correctly
+[ ] My Shifts page is styled correctly
+[ ] Manager Dashboard is styled correctly
+[ ] Shift List page is styled correctly
+[ ] Attendance List page is styled correctly
+[ ] Create/Edit/Delete pages are styled correctly
+
+11. FINAL CHECK
+[ ] No server errors during normal use
+[ ] Navigation links work correctly
+[ ] System behaves correctly in employee role
+[ ] System behaves correctly in manager role

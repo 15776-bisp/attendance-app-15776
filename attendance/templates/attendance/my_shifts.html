@@ -1,0 +1,386 @@
+{% load custom_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Shifts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #1f4e79;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .nav {
+            margin-top: 10px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        .profile-box img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .profile-name {
+            font-weight: bold;
+            color: white;
+        }
+
+        .week-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .week-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .day-card {
+            min-width: 120px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #e9eef3;
+            text-align: center;
+            transition: 0.2s ease;
+        }
+
+        .day-card strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #1f4e79;
+        }
+
+        .day-card.off-day {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .day-card.off-day strong,
+        .day-card.off-day span {
+            color: #155724;
+        }
+
+        .day-card.pending-day {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+
+        .day-card.pending-day strong,
+        .day-card.pending-day span {
+            color: #856404;
+        }
+
+        .day-card.rejected-day {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .day-card.rejected-day strong,
+        .day-card.rejected-day span {
+            color: #721c24;
+        }
+
+        .day-card.taken-day {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+
+        .day-card.taken-day strong,
+        .day-card.taken-day span {
+            color: #721c24;
+        }
+
+        .day-card.today-card {
+            border: 2px solid #1f4e79;
+        }
+
+        .day-card.disabled-day {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .shift-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .shift-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1f1f1f;
+        }
+
+        .status-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid #1f4e79;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .past-note {
+            color: #a94442;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn-present {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-absent {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-late {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .reason-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .empty-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .taken-users {
+            margin-top: 6px;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>My Shifts</h1>
+
+            <div class="profile-box">
+                {% if profile and profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <div style="width:45px; height:45px; border-radius:50%; background:white; color:#1f4e79; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                        {{ user.username|first|upper }}
+                    </div>
+                {% endif %}
+                <div class="profile-name">{{ user.username }}</div>
+            </div>
+
+            <div class="nav">
+                <a href="/">Home</a>
+                <a href="/my-shifts/">My Shifts</a>
+                <a href="/attendance-history/">Attendance History</a>
+
+                {% if is_manager_user %}
+                    <a href="/manager-dashboard/">Manager Dashboard</a>
+                    <a href="/create-shift/">Create Shift</a>
+                    <a href="/shift-list/">Shift List</a>
+                    <a href="/attendance-list/">Attendance List</a>
+                {% endif %}
+
+                <form action="/logout/" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding:0; margin:0;">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}error-message{% else %}message{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="week-box">
+            <h2>This Week</h2>
+            <div class="week-grid">
+                {% for day in week_days %}
+                    {% if day in off_days %}
+                        <div class="day-card off-day">
+                            <strong>{{ day|date:"D" }}</strong>
+                            <span>{{ day|date:"d M Y" }}</span>
+                            <div style="margin-top:6px; font-size:12px; font-weight:bold;">Approved Off Day</div>
+                        </div>
+
+                    {% elif my_offday_requests|get_item:day == "pending" %}
+                        <div class="day-card pending-day">
+                            <strong>{{ day|date:"D" }}</strong>
+                            <span>{{ day|date:"d M Y" }}</span>
+                            <div style="margin-top:6px; font-size:12px; font-weight:bold;">Pending Approval</div>
+                        </div>
+
+                    {% elif my_offday_requests|get_item:day == "rejected" %}
+                        <div class="day-card rejected-day">
+                            <strong>{{ day|date:"D" }}</strong>
+                            <span>{{ day|date:"d M Y" }}</span>
+                            <div style="margin-top:6px; font-size:12px; font-weight:bold;">Rejected</div>
+                        </div>
+
+                    {% elif day in department_taken_days %}
+                        <div class="day-card taken-day disabled-day">
+                            <strong>{{ day|date:"D" }}</strong>
+                            <span>{{ day|date:"d M Y" }}</span>
+                            <div style="margin-top:6px; font-size:12px; font-weight:bold;">Taken</div>
+
+                            <div class="taken-users">
+                                {% for username in department_taken_days|get_item:day %}
+                                    {{ username }}<br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    {% elif day < today %}
+                        <div class="day-card disabled-day">
+                            <strong>{{ day|date:"D" }}</strong>
+                            <span>{{ day|date:"d M Y" }}</span>
+                            <div style="margin-top:6px; font-size:12px;">Past</div>
+                        </div>
+
+                    {% else %}
+                        <a href="/request-day-off/{{ day|date:'Y-m-d' }}/" style="text-decoration:none; color:inherit;">
+                            <div class="day-card {% if day == today %}today-card{% endif %}">
+                                <strong>{{ day|date:"D" }}</strong>
+                                <span>{{ day|date:"d M Y" }}</span>
+                                <div style="margin-top:6px; font-size:12px;">Request Day Off</div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        {% for shift in shifts %}
+            <div class="shift-card">
+                <div class="shift-title">
+                    {{ shift.date }} — {{ shift.shift_type|title }} — {{ shift.department.name }}
+                </div>
+
+                {% if attendance_map|get_item:shift.id %}
+                    <div class="status-box">
+                        <p><strong>Current status:</strong> {{ attendance_map|get_item:shift.id|get_status|title }}</p>
+                        {% if attendance_map|get_item:shift.id|get_reason %}
+                            <p><strong>Reason:</strong> {{ attendance_map|get_item:shift.id|get_reason }}</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="status-box">
+                        <p>No attendance submitted yet.</p>
+                    </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="shift_id" value="{{ shift.id }}">
+
+                    {% if shift.date in off_days %}
+                        <p class="past-note" style="color:#155724;">This is your approved day off. Attendance is not required.</p>
+                    {% elif shift.date == today %}
+                        <button class="btn btn-present" type="submit" name="status" value="present">Present</button>
+                        <button class="btn btn-absent" type="submit" name="status" value="absent">Absent</button>
+                        <button class="btn btn-late" type="submit" name="status" value="late">Late</button>
+
+                        <div>
+                            <input class="reason-input" type="text" name="reason_text" placeholder="Reason (if absent or late)">
+                        </div>
+                    {% elif shift.date < today %}
+                        <p class="past-note">Past shifts cannot be changed.</p>
+                    {% else %}
+                        <p class="past-note">Future shifts cannot be updated yet.</p>
+                    {% endif %}
+                </form>
+            </div>
+        {% empty %}
+            <div class="empty-box">
+                <p>No shifts available.</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

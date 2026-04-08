@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1f4e79, #2b6aa3);
+            color: white;
+            padding: 24px;
+            border-radius: 14px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: 0.95;
+        }
+
+        .nav {
+            margin-top: 12px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 16px;
+            font-weight: bold;
+        }
+
+        .nav a.active-link {
+            background: rgba(255,255,255,0.22);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        .filter-box,
+        .section-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .filter-box form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-box input,
+        .filter-box select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .filter-box button {
+            padding: 10px 16px;
+            border: none;
+            background: #1f4e79;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 6px solid #1f4e79;
+        }
+
+        .summary-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        .summary-card .value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .present-card {
+            border-left-color: #28a745;
+        }
+
+        .absent-card {
+            border-left-color: #dc3545;
+        }
+
+        .late-card {
+            border-left-color: #fd7e14;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1050px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mini-note {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #e9eef3;
+        }
+
+        .status-present {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .status-absent {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .status-late {
+            color: #fd7e14;
+            font-weight: bold;
+        }
+
+        .group-badge {
+            display: inline-block;
+            background: #e9eef3;
+            color: #1f4e79;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .weekly-table {
+            overflow-x: auto;
+        }
+
+        .weekly-table table {
+            min-width: 1000px;
+        }
+
+        .cell-box {
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .cell-offday {
+            background: #d4edda;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .cell-attendance {
+            background: #e9eefc;
+            color: #1f4e79;
+            font-weight: bold;
+        }
+
+        .cell-empty {
+            background: #f8f9fa;
+            color: #777;
+        }
+
+        .alert-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .alert-card {
+            border-radius: 10px;
+            padding: 14px;
+            border-left: 6px solid #dc3545;
+            background: #fff5f5;
+        }
+
+        .alert-card.late {
+            border-left-color: #fd7e14;
+            background: #fff8f0;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .alert-meta {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .approve-link {
+            color: #28a745;
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: 12px;
+        }
+
+        .reject-link {
+            color: #dc3545;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .read-link {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #1f4e79;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Manager Dashboard</h1>
+            <p>Weekly visibility for attendance, day-offs, and latest late/absent alerts.</p>
+
+            <div class="nav">
+                <a href="/">Home</a>
+                <a href="/my-shifts/">My Shifts</a>
+                <a href="/attendance-history/">Attendance History</a>
+                <a href="/manager-dashboard/" class="active-link">Manager Dashboard</a>
+                <a href="/create-shift/">Create Shift</a>
+                <a href="/shift-list/">Shift List</a>
+                <a href="/attendance-list/">Attendance List</a>
+
+                <form action="/logout/" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding:0; margin:0;">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}error-message{% else %}message{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="filter-box">
+            <form method="get">
+                <label>Week Based On:</label>
+                <input type="date" name="date" value="{{ selected_date }}">
+
+                <label>Department:</label>
+                <select name="dept">
+                    <option value="">All Departments</option>
+                    {% for d in departments %}
+                        <option value="{{ d.id }}" {% if selected_dept == d.id|stringformat:"s" %}selected{% endif %}>
+                            {{ d.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Apply Filters</button>
+            </form>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card present-card">
+                <h3>Present</h3>
+                <div class="value">{{ total_present }}</div>
+            </div>
+
+            <div class="summary-card absent-card">
+                <h3>Absent</h3>
+                <div class="value">{{ total_absent }}</div>
+            </div>
+
+            <div class="summary-card late-card">
+                <h3>Late</h3>
+                <div class="value">{{ total_late }}</div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2>Weekly Employee Overview</h2>
+            <div class="mini-note">Each row shows one employee for the selected week.</div>
+
+            <div class="weekly-table">
+                <table>
+                    <tr>
+                        <th>User</th>
+                        <th>Department</th>
+                        {% for day in week_days %}
+                            <th>{{ day|date:"D" }}<br>{{ day|date:"d M" }}</th>
+                        {% endfor %}
+                    </tr>
+
+                    {% for row in weekly_rows %}
+                        <tr>
+                            <td>{{ row.username }}</td>
+                            <td>{{ row.department }}</td>
+
+                            {% for cell in row.cells %}
+                                <td>
+                                    <div class="cell-box {% if cell.type == 'offday' %}cell-offday{% elif cell.type == 'attendance' %}cell-attendance{% else %}cell-empty{% endif %}">
+                                        <div>{{ cell.label }}</div>
+                                        {% if cell.details %}
+                                            <div style="font-size:11px; margin-top:4px;">{{ cell.details }}</div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="9">No employees found.</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2>Pending Day-Off Requests</h2>
+            <div class="mini-note">Managers can approve or reject employee requests.</div>
+
+            <table>
+                <tr>
+                    <th>User</th>
+                    <th>Department</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for off in pending_offday_requests %}
+                    <tr>
+                        <td>{{ off.user.username }}</td>
+                        <td>
+                            {% for g in off.user.groups.all %}
+                                {% if g.name != "Manager" %}
+                                    <span class="group-badge">{{ g.name }}</span>
+                                {% endif %}
+                            {% empty %}
+                                No Group
+                            {% endfor %}
+                        </td>
+                        <td>{{ off.date }}</td>
+                        <td>{{ off.status|title }}</td>
+                        <td>
+                            <a href="/offday/approve/{{ off.id }}/" class="approve-link">Approve</a>
+                            <a href="/offday/reject/{{ off.id }}/" class="reject-link">Reject</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">No pending day-off requests.</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="two-column">
+            <div class="section-box">
+                <h2>Attendance Overview</h2>
+                <div class="mini-note">Submitted attendance records for the selected week.</div>
+
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Shift</th>
+                        <th>Department</th>
+                        <th>User</th>
+                        <th>Status</th>
+                        <th>Reason</th>
+                        <th>Created</th>
+                    </tr>
+
+                    {% for r in records %}
+                        <tr>
+                            <td>{{ r.shift.date }}</td>
+                            <td>{{ r.shift.shift_type|title }}</td>
+                            <td>{{ r.shift.department.name }}</td>
+                            <td>{{ r.user.username }}</td>
+                            <td>
+                                {% if r.status == "present" %}
+                                    <span class="status-present">Present</span>
+                                {% elif r.status == "absent" %}
+                                    <span class="status-absent">Absent</span>
+                                {% elif r.status == "late" %}
+                                    <span class="status-late">Late</span>
+                                {% else %}
+                                    {{ r.status }}
+                                {% endif %}
+                            </td>
+                            <td>{{ r.reason_text }}</td>
+                            <td>{{ r.created_at }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No records found.</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div>
+                <div class="section-box">
+                    <h2>Latest Alerts</h2>
+                    <div class="mini-note">Unread late and absent alerts for this week.</div>
+
+                    <div class="alert-list">
+                        {% for n in notifications %}
+                            <div class="alert-card {% if n.notification_type == 'late' %}late{% endif %}">
+                                <div class="alert-title">
+                                    {{ n.user.username }} — {{ n.notification_type|title }}
+                                </div>
+                                <div>{{ n.message }}</div>
+                                <div class="alert-meta">
+                                    {{ n.shift.department.name }} | {{ n.shift.date }} | {{ n.created_at }}
+                                </div>
+
+                                <a href="/notification/read/{{ n.id }}/" class="read-link">
+                                    Mark as read ✔
+                                </a>
+                            </div>
+                        {% empty %}
+                            <div class="cell-box cell-empty">No unread alerts.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <h2>Department Day-Offs</h2>
+                    <div class="mini-note">Who selected a day off during the selected week.</div>
+
+                    <table>
+                        <tr>
+                            <th>User</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+
+                        {% for off in off_day_records %}
+                            <tr>
+                                <td>{{ off.user.username }}</td>
+                                <td>
+                                    {% for g in off.user.groups.all %}
+                                        {% if g.name != "Manager" %}
+                                            <span class="group-badge">{{ g.name }}</span>
+                                        {% endif %}
+                                    {% empty %}
+                                        No Group
+                                    {% endfor %}
+                                </td>
+                                <td>{{ off.date }}</td>
+                                <td>{{ off.status|title }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No off-day records found.</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

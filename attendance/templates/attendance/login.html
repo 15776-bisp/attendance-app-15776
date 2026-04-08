@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .title-box {
+            background: #1f4e79;
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .title-box h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background: #1f4e79;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .errorlist {
+            color: #dc3545;
+            padding-left: 18px;
+        }
+
+        .help-text {
+            margin-top: 18px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="title-box">
+                <h1>Attendance System</h1>
+                <div class="subtitle">Log in to continue</div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Log in</button>
+            </form>
+
+            <div class="help-text">
+                Use your employee or manager account to access the system.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

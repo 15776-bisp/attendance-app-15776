@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Shift</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #1f4e79;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            margin-top: 10px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #1f4e79;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #1f4e79;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Edit Shift</h1>
+            <div class="nav">
+                <a href="/">Home</a>
+                <a href="/my-shifts/">My Shifts</a>
+                <a href="/attendance-history/">Attendance History</a>
+                <a href="/manager-dashboard/">Manager Dashboard</a>
+                <a href="/create-shift/">Create Shift</a>
+                <a href="/shift-list/">Shift List</a>
+                <a href="/attendance-list/">Attendance List</a>
+                <form action="/logout/" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding:0; margin:0;">
+        Logout
+    </button>
+</form>
+            </div>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="form-box">
+            <form method="post">
+                {% csrf_token %}
+
+                <p>
+                    <label>Date:</label><br>
+                    <input type="date" name="date" value="{{ shift.date|date:'Y-m-d' }}" required>
+                </p>
+
+                <p>
+                    <label>Shift type:</label><br>
+                    <select name="shift_type" required>
+                        <option value="morning" {% if shift.shift_type == "morning" %}selected{% endif %}>Morning</option>
+                        <option value="evening" {% if shift.shift_type == "evening" %}selected{% endif %}>Evening</option>
+                        <option value="night" {% if shift.shift_type == "night" %}selected{% endif %}>Night</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label>Department:</label><br>
+                    <select name="department" required>
+                        {% for d in departments %}
+                            <option value="{{ d.id }}" {% if shift.department.id == d.id %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+
+                <button type="submit">Update Shift</button>
+            </form>
+
+            <a class="back-link" href="/shift-list/">← Back to Shift List</a>
+        </div>
+    </div>
+</body>
+</html>

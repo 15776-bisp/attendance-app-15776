@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #1f4e79;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            margin-top: 10px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #e9eef3;
+        }
+
+        .action a {
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .edit-link {
+            color: #1f4e79;
+        }
+
+        .delete-link {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Attendance List</h1>
+            <div class="nav">
+                <a href="/">Home</a>
+                <a href="/my-shifts/">My Shifts</a>
+                <a href="/attendance-history/">Attendance History</a>
+                <a href="/manager-dashboard/">Manager Dashboard</a>
+                <a href="/create-shift/">Create Shift</a>
+                <a href="/shift-list/">Shift List</a>
+                <a href="/attendance-list/">Attendance List</a>
+                <form action="/logout/" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="background:none; border:none; color:white; font-weight:bold; cursor:pointer; padding:0; margin:0;">
+        Logout
+    </button>
+</form>
+            </div>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Date</th>
+                <th>Shift</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Reason</th>
+                <th>Action</th>
+            </tr>
+
+            {% for r in records %}
+                <tr>
+                    <td>{{ r.user.username }}</td>
+                    <td>{{ r.shift.date }}</td>
+                    <td>{{ r.shift.shift_type|title }}</td>
+                    <td>{{ r.shift.department.name }}</td>
+                    <td>
+                        {% if r.status == "present" %}
+                            <strong style="color:green;">Present</strong>
+                        {% elif r.status == "absent" %}
+                            <strong style="color:red;">Absent</strong>
+                        {% elif r.status == "late" %}
+                            <strong style="color:orange;">Late</strong>
+                        {% else %}
+                            {{ r.status }}
+                        {% endif %}
+                    </td>
+                    <td>{{ r.reason_text }}</td>
+                    <td class="action">
+                        <a class="edit-link" href="/edit-attendance/{{ r.id }}/">Edit</a>
+                        <a class="delete-link" href="/delete-attendance/{{ r.id }}/">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">No attendance records found.</td>
+                </tr>
+            {% endfor %}
+            <div style="background:white; padding:20px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-bottom:20px;">
+    <form method="get" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="date" name="date" value="{{ selected_date|default:'' }}" style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+
+        <select name="dept" style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+            <option value="">All Departments</option>
+            {% for d in departments %}
+                <option value="{{ d.id }}" {% if selected_dept == d.id|stringformat:"s" %}selected{% endif %}>
+                    {{ d.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="status" style="padding:10px; border:1px solid #ccc; border-radius:6px;">
+            <option value="">All Statuses</option>
+            <option value="present" {% if selected_status == "present" %}selected{% endif %}>Present</option>
+            <option value="absent" {% if selected_status == "absent" %}selected{% endif %}>Absent</option>
+            <option value="late" {% if selected_status == "late" %}selected{% endif %}>Late</option>
+        </select>
+
+        <button type="submit" style="background:#1f4e79; color:white; border:none; padding:10px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">
+            Filter
+        </button>
+
+        <a href="/attendance-list/" style="text-decoration:none; color:#1f4e79; font-weight:bold;">Reset</a>
+    </form>
+</div>
+        </table>
+    </div>
+</body>
+</html>
