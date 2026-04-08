@@ -1,88 +1,91 @@
 ATTENDANCE SYSTEM – TESTING CHECKLIST
 
+[y]=yes
+[n]=no
+
 1. LOGIN TESTS
-[ ] Login page opens correctly
-[ ] Employee can log in with valid credentials
-[ ] Manager can log in with valid credentials
-[ ] Invalid login shows error
-[ ] Logout works correctly
+[y] Login page opens correctly
+[y] Employee can log in with valid credentials
+[y] Manager can log in with valid credentials
+[y] Invalid login shows error
+[y] Logout works correctly
 
 2. HOME DASHBOARD TESTS
-[ ] Employee sees employee dashboard links only
-[ ] Manager sees manager dashboard links
-[ ] Home page opens correctly after login
+[y] Employee sees employee dashboard links only
+[y] Manager sees manager dashboard links
+[y] Home page opens correctly after login
 
 3. MY SHIFTS TESTS
-[ ] Employee can see shifts only for their department
-[ ] Employee cannot see shifts from other departments
-[ ] Future shifts show attendance buttons
-[ ] Past shifts do not allow attendance submission
+[y] Employee can see shifts only for their department
+[y] Employee cannot see shifts from other departments
+[y] Future shifts show attendance buttons
+[y] Past shifts do not allow attendance submission
 
 4. ATTENDANCE SUBMISSION TESTS
-[ ] Employee can mark Present
-[ ] Employee can mark Absent
-[ ] Employee can mark Late
-[ ] Present can be submitted without reason
-[ ] Absent requires reason
-[ ] Late requires reason
-[ ] Success message appears after submission
-[ ] Error message appears when reason is missing
+[y] Employee can mark Present
+[y] Employee can mark Absent
+[y] Employee can mark Late
+[y] Present can be submitted without reason
+[y] Absent requires reason
+[y] Late requires reason
+[y] Success message appears after submission
+[y] Error message appears when reason is missing
 
 5. ATTENDANCE HISTORY TESTS
-[ ] Employee can see previously submitted attendance
-[ ] History shows correct date
-[ ] History shows correct shift type
-[ ] History shows correct department
-[ ] History shows correct status
-[ ] History shows reason if provided
+[y] Employee can see previously submitted attendance
+[y] History shows correct date
+[y] History shows correct shift type
+[y] History shows correct department
+[y] History shows correct status
+[y] History shows reason if provided
 
 6. MANAGER DASHBOARD TESTS
-[ ] Manager dashboard opens successfully
-[ ] Summary cards show attendance counts
-[ ] Attendance table shows correct records
-[ ] Status colors display correctly
-[ ] Date filter works
-[ ] Department filter works
+[y] Manager dashboard opens successfully
+[y] Summary cards show attendance counts
+[y] Attendance table shows correct records
+[y] Status colors display correctly
+[y] Date filter works
+[y] Department filter works
 
 7. SHIFT MANAGEMENT TESTS
-[ ] Manager can create a shift
-[ ] Manager can edit a shift
-[ ] Manager can delete a shift
-[ ] Delete shift confirmation page works
-[ ] Duplicate shift is prevented
-[ ] Shift list page opens correctly
-[ ] Shift list date filter works
-[ ] Shift list department filter works
-[ ] Shift list reset works
+[y] Manager can create a shift
+[y] Manager can edit a shift
+[y] Manager can delete a shift
+[y] Delete shift confirmation page works
+[y] Duplicate shift is prevented
+[y] Shift list page opens correctly
+[y] Shift list date filter works
+[y] Shift list department filter works
+[y] Shift list reset works
 
 8. ATTENDANCE MANAGEMENT TESTS
-[ ] Manager can view all attendance records
-[ ] Manager can filter attendance by date
-[ ] Manager can filter attendance by department
-[ ] Manager can filter attendance by status
-[ ] Manager can reset attendance filters
-[ ] Manager can edit attendance record
-[ ] Manager can delete attendance record
-[ ] Delete attendance confirmation page works
+[y] Manager can view all attendance records
+[y] Manager can filter attendance by date
+[y] Manager can filter attendance by department
+[y] Manager can filter attendance by status
+[y] Manager can reset attendance filters
+[y] Manager can edit attendance record
+[y] Manager can delete attendance record
+[y] Delete attendance confirmation page works
 
 9. PERMISSION TESTS
-[ ] Employee cannot access manager dashboard
-[ ] Employee cannot access create shift page
-[ ] Employee cannot access shift list page
-[ ] Employee cannot access attendance list page
-[ ] Manager can access all manager pages
+[y] Employee cannot access manager dashboard
+[y] Employee cannot access create shift page
+[y] Employee cannot access shift list page
+[y] Employee cannot access attendance list page
+[y] Manager can access all manager pages
 
 10. UI TESTS
-[ ] Login page is styled correctly
-[ ] Home page is styled correctly
-[ ] My Shifts page is styled correctly
-[ ] Manager Dashboard is styled correctly
-[ ] Shift List page is styled correctly
-[ ] Attendance List page is styled correctly
-[ ] Create/Edit/Delete pages are styled correctly
+[y] Login page is styled correctly
+[y] Home page is styled correctly
+[y] My Shifts page is styled correctly
+[y] Manager Dashboard is styled correctly
+[y] Shift List page is styled correctly
+[y] Attendance List page is styled correctly
+[y] Create/Edit/Delete pages are styled correctly
 
 11. FINAL CHECK
-[ ] No server errors during normal use
-[ ] Navigation links work correctly
-[ ] System behaves correctly in employee role
-[ ] System behaves correctly in manager role
+[y] No server errors during normal use
+[y] Navigation links work correctly
+[y] System behaves correctly in employee role
+[y] System behaves correctly in manager role
